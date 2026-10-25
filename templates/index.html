@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FaceVision | Face Detection System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="page">
+        <header class="topbar">
+            <a href="/" class="brand">
+                <span class="brand-icon">◉</span>
+                FaceVision
+            </a>
+            <span class="status"><span></span> Computer Vision System</span>
+        </header>
+
+        <main>
+            <section class="hero">
+                <div class="eyebrow">AI-POWERED IMAGE ANALYSIS</div>
+                <h1>Every face tells<br>a <span>different story.</span></h1>
+                <p>Upload an image and let computer vision detect the faces in it.</p>
+            </section>
+
+            <section class="detector">
+                <form method="POST" action="/" enctype="multipart/form-data">
+                    <label class="upload-area" for="image" id="upload-area">
+                        <span class="upload-icon">↑</span>
+                        <strong id="upload-title">Drop your image here</strong>
+                        <span id="upload-subtitle">or click to browse your files</span>
+                        <small>JPG, JPEG, PNG, WEBP or BMP · Max 10 MB</small>
+                        <input type="file" id="image" name="image"
+                               accept=".jpg,.jpeg,.png,.webp,.bmp" required>
+                    </label>
+
+                    <div id="preview-container" class="preview-container" hidden>
+                        <img id="preview-image" alt="Selected image preview">
+                    </div>
+
+                    <button type="submit" class="detect-btn">
+                        Detect Faces <span aria-hidden="true">→</span>
+                    </button>
+                </form>
+
+                {% if error %}
+                <div class="message error" role="alert">
+                    <strong>Something went wrong</strong>
+                    <p>{{ error }}</p>
+                </div>
+                {% endif %}
+
+                {% if result_image %}
+                <section class="result" aria-live="polite">
+                    <div class="result-top">
+                        <span class="result-label">ANALYSIS RESULT</span>
+                        <span class="result-check">✓ Complete</span>
+                    </div>
+
+                    <div class="face-count">
+                        <span class="count-number">{{ face_count }}</span>
+                        <span class="count-label">
+                            Face{{ 's' if face_count != 1 else '' }} detected
+                        </span>
+                    </div>
+
+                    <img class="result-image" src="{{ result_image }}"
+                         alt="Processed image with detected faces">
+
+                    <p class="result-note">
+                        {% if face_count == 0 %}
+                            No faces were detected. Try a clearer, front-facing image.
+                        {% else %}
+                            Detected faces are outlined with green rectangles.
+                        {% endif %}
+                    </p>
+
+                    <a class="download-btn" href="{{ result_image }}"
+                       download="face-detection-result.jpg">
+                        Download Result ↓
+                    </a>
+                </section>
+                {% endif %}
+            </section>
+
+            <section class="how-it-works">
+                <h3>How it works</h3>
+                <div class="steps">
+                    <div>
+                        <span>01</span>
+                        <strong>Upload</strong>
+                        <p>Choose an image from your device.</p>
+                    </div>
+                    <div>
+                        <span>02</span>
+                        <strong>Detect</strong>
+                        <p>OpenCV scans the image for faces.</p>
+                    </div>
+                    <div>
+                        <span>03</span>
+                        <strong>View results</strong>
+                        <p>See the detected faces and total count.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>FaceVision · A Python, Flask and OpenCV mini project</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
